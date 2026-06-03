@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🍱 Đi Chợ Giúp Mẹ – Dinh Dưỡng Vui</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800;900&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --carb:#f5a623;--carb-l:#fff8e1;
+  --prot:#e8453c;--prot-l:#ffe8e7;
+  --fat:#9b59b6;--fat-l:#f3e8ff;
+  --vit:#27ae60;--vit-l:#e8f8ee;
+  --pink:#e91e8c;--cyan:#00bcd4;
+  --white:#ffffff;--bg:#fff9f0;
+  --shadow:0 8px 28px rgba(0,0,0,.13);
+  --shadow2:0 3px 12px rgba(0,0,0,.09);
+  --r:20px;
+  --fh:'Baloo 2',sans-serif;
+  --fb:'Nunito',sans-serif;
+}
+html,body{height:100%;font-family:var(--fb);background:var(--bg);overflow:hidden;-webkit-tap-highlight-color:transparent}
+
+/* APP WRAPPER */
+#app{
+  width:100%;height:100vh;
+  background:linear-gradient(160deg,#ffe5b4 0%,#ffd4e8 40%,#c8f0ff 75%,#d4fce4 100%);
+  position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;
+}
+
+/* DECORATIVE */
+.deco-stall{position:absolute;bottom:0;z-index:1;}
+.deco-stall .awn{width:80px;height:32px;border-radius:0 0 50% 50%;position:absolute;top:-32px;left:0;}
+.deco-stall .bod{width:80px;height:48px;border-radius:6px 6px 0 0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+.s1 .awn{background:linear-gradient(#ff6b6b,#ee5a24);}.s1 .bod{background:#fff3cd;}
+.s2 .awn{background:linear-gradient(#ffd32a,#ffb142);}.s2 .bod{background:#e8f5e9;}
+.s3 .awn{background:linear-gradient(#0652dd,#1289a7);}.s3 .bod{background:#fce4ec;}
+.lantern{position:absolute;width:18px;height:26px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#ffe082,#f57c00);box-shadow:0 0 10px #f57c0066;animation:lsway 3s ease-in-out infinite;z-index:2;}
+.lantern::after{content:'';position:absolute;bottom:-7px;left:7px;width:4px;height:7px;background:#f57c00;border-radius:2px;}
+@keyframes lsway{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;z-index:10;opacity:0;pointer-events:none;transition:opacity .35s ease;overflow-y:auto;overflow-x:hidden;}
+.screen.active{opacity:1;pointer-events:all;}
+
+/* CARD */
+.card{background:var(--white);border-radius:var(--r);box-shadow:var(--shadow);padding:22px 24px;max-width:500px;width:94%;position:relative;z-index:11;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:12px 28px;border-radius:50px;border:none;cursor:pointer;font-family:var(--fh);font-size:1.1rem;font-weight:800;transition:transform .13s,box-shadow .13s,filter .13s;box-shadow:0 5px 0 rgba(0,0,0,.18);user-select:none;-webkit-user-select:none;}
+.btn:hover{transform:translateY(-2px) scale(1.03);filter:brightness(1.06);}
+.btn:active{transform:translateY(2px) scale(.97);box-shadow:0 1px 0 rgba(0,0,0,.18);}
+.btn-green{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#fff;}
+.btn-orange{background:linear-gradient(135deg,#f5a623,#f7971e);color:#fff;}
+.btn-red{background:linear-gradient(135deg,#e8453c,#fa709a);color:#fff;}
+.btn-purple{background:linear-gradient(135deg,#9b59b6,#8e44ad);color:#fff;}
+.btn-blue{background:linear-gradient(135deg,#4facfe,#00f2fe);color:#fff;}
+.btn-pink{background:linear-gradient(135deg,#e91e8c,#ff6090);color:#fff;}
+.btn-cyan{background:linear-gradient(135deg,#00bcd4,#26c6da);color:#fff;}
+.btn-sm{font-size:.9rem;padding:9px 20px;}
+.btn-lg{font-size:1.3rem;padding:16px 36px;width:100%;margin-top:4px;animation:btnPulse 2s ease-in-out infinite;}
+@keyframes btnPulse{0%,100%{box-shadow:0 5px 0 rgba(0,0,0,.18),0 0 0 0 rgba(245,166,35,.4)}50%{box-shadow:0 5px 0 rgba(0,0,0,.18),0 0 0 10px rgba(245,166,35,.0)}}
+
+/* LOADING */
+#s-loading{background:linear-gradient(135deg,#ffe5b4,#ffd4e8,#c8f0ff);z-index:9999;justify-content:center;}
+.ld-icon{font-size:5rem;animation:ldBounce .7s ease-in-out infinite alternate;}
+@keyframes ldBounce{0%{transform:scale(1)rotate(-5deg)}100%{transform:scale(1.2)rotate(5deg)}}
+.ld-bar-wrap{width:220px;height:14px;background:rgba(255,255,255,.5);border-radius:50px;margin-top:16px;overflow:hidden;}
+.ld-bar{height:100%;background:linear-gradient(90deg,#f5a623,#e8453c,#9b59b6,#27ae60);border-radius:50px;animation:ldBar 1.6s ease-in-out infinite;}
+@keyframes ldBar{0%{width:0}100%{width:100%}}
+.ld-text{font-family:var(--fh);font-size:1.3rem;font-weight:800;color:#e8453c;margin-top:10px;}
+
+/* START SCREEN – FIXED: button at top area, not off-screen */
+#s-start{justify-content:flex-start;padding:8px 0 24px;}
+#s-start .card{text-align:center;margin-top:10px;}
+.logo-emoji{font-size:3.4rem;animation:logoFloat 2s ease-in-out infinite alternate;display:inline-block;}
+@keyframes logoFloat{0%{transform:translateY(0)rotate(-4deg)}100%{transform:translateY(-10px)rotate(4deg)}}
+.logo-title{font-family:var(--fh);font-size:1.9rem;font-weight:900;line-height:1.1;background:linear-gradient(135deg,#f5a623,#e8453c,#9b59b6,#27ae60);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:3px;}
+.logo-sub{font-size:.88rem;color:#888;font-weight:600;margin-bottom:12px;}
+.mom-intro{font-size:.9rem;color:#555;line-height:1.5;background:#fff9f0;border-radius:12px;padding:10px 13px;margin-bottom:14px;border-left:4px solid #f5a623;text-align:left;}
+.team-lbl{display:block;font-weight:800;color:#444;margin-bottom:8px;font-size:.9rem;}
+.team-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
+.team-row{display:flex;align-items:center;gap:9px;}
+.team-badge{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:900;color:#fff;flex-shrink:0;}
+.team-input{flex:1;padding:9px 12px;border-radius:12px;border:2.5px solid #e0e0e0;font-size:.97rem;font-family:var(--fb);font-weight:700;outline:none;transition:border .2s;}
+.team-input:focus{border-color:#f5a623;}
+/* START BUTTON – big, visible, top area */
+.start-btn-wrap{background:linear-gradient(135deg,#fff9f0,#ffe8cc);border-radius:16px;padding:14px;border:2px dashed #f5a62366;margin-top:4px;}
+.start-btn-label{font-size:.8rem;font-weight:700;color:#f5a623;text-align:center;margin-bottom:8px;}
+
+/* MAP */
+#s-map{justify-content:flex-start;padding:8px 0 80px;}
+#s-map .card{max-width:480px;margin-top:10px;}
+.map-title{font-family:var(--fh);font-size:1.5rem;font-weight:900;color:#e8453c;margin-bottom:14px;text-align:center;}
+.map-nodes{display:flex;flex-direction:column;gap:10px;}
+.map-node{border-radius:16px;padding:13px 16px;display:flex;align-items:center;gap:12px;border:3px solid transparent;transition:transform .2s,box-shadow .2s;cursor:pointer;position:relative;}
+.map-node.locked{opacity:.45;cursor:default;filter:grayscale(.5);}
+.map-node.unlocked:hover{transform:scale(1.02);box-shadow:var(--shadow);}
+.map-node.done{opacity:.72;}
+.map-node.current{animation:nodePulse 1.3s ease-in-out infinite;}
+@keyframes nodePulse{0%,100%{box-shadow:0 0 0 3px var(--nc,#f5a623),var(--shadow2)}50%{box-shadow:0 0 0 7px rgba(0,0,0,.08),var(--shadow2)}}
+.node-icon{font-size:2rem;flex-shrink:0;}
+.node-info{flex:1;text-align:left;}
+.node-num{font-size:.75rem;font-weight:800;color:#999;}
+.node-name{font-family:var(--fh);font-size:1rem;font-weight:900;color:#333;}
+.node-status{font-size:.78rem;font-weight:700;margin-top:2px;}
+.node-arrow{font-size:1.3rem;flex-shrink:0;}
+.map-action{margin-top:14px;text-align:center;}
+
+/* SCOREBAR */
+#scorebar{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-bottom:2px solid #f0e0c8;padding:5px 10px;display:none;align-items:center;gap:8px;overflow-x:auto;}
+.sb-team{display:flex;align-items:center;gap:6px;background:#f8f8f8;border-radius:50px;padding:4px 12px 4px 7px;border:2.5px solid #e0e0e0;white-space:nowrap;transition:all .25s;flex-shrink:0;}
+.sb-team.active{border-color:#f5a623;background:#fff9f0;box-shadow:0 0 0 2px #f5a62344;}
+.sb-badge{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:900;color:#fff;}
+.sb-name{font-weight:800;font-size:.85rem;color:#333;}
+.sb-score{font-family:var(--fh);font-weight:900;font-size:1rem;color:#e8453c;}
+.sb-sep{width:2px;height:28px;background:#e0e0e0;border-radius:2px;flex-shrink:0;}
+.sb-round{font-family:var(--fh);font-size:.88rem;font-weight:800;color:#9b59b6;white-space:nowrap;flex-shrink:0;}
+.sb-timer-wrap{display:flex;align-items:center;gap:5px;flex-shrink:0;margin-left:auto;}
+.sb-timer{font-family:var(--fh);font-size:1.15rem;font-weight:900;color:#e8453c;min-width:32px;text-align:center;}
+.sb-tbar{width:70px;height:7px;background:#f0e0c8;border-radius:50px;overflow:hidden;}
+.sb-tfill{height:100%;background:linear-gradient(90deg,#43e97b,#f5a623);border-radius:50px;transition:width .9s linear,background .5s;}
+
+/* PLAY SCREEN */
+#s-play{justify-content:flex-start;padding-top:50px;padding-bottom:20px;}
+.play-wrap{width:100%;max-width:520px;padding:8px 10px 16px;display:flex;flex-direction:column;gap:10px;align-items:center;}
+.round-hdr{background:var(--white);border-radius:14px;box-shadow:var(--shadow2);padding:9px 16px;text-align:center;width:100%;}
+.round-hdr-title{font-family:var(--fh);font-size:1.05rem;font-weight:900;color:#e8453c;}
+.round-hdr-sub{font-size:.82rem;color:#888;font-weight:600;}
+.mom-row{display:flex;align-items:flex-end;gap:10px;}
+.mom-char{font-size:3.2rem;animation:momIdle 2.5s ease-in-out infinite;display:inline-block;}
+@keyframes momIdle{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.mom-bubble{background:var(--white);border-radius:16px 16px 16px 4px;box-shadow:var(--shadow2);padding:9px 14px;font-size:.92rem;font-weight:700;color:#333;max-width:240px;}
+
+/* FOOD CARD */
+.food-stage{display:flex;justify-content:center;align-items:center;width:100%;}
+.food-card{background:var(--white);border-radius:18px;box-shadow:var(--shadow);padding:12px 20px;text-align:center;border:3px solid #eee;min-width:120px;transition:transform .2s;animation:foodAppear .4s cubic-bezier(.34,1.56,.64,1);}
+@keyframes foodAppear{0%{transform:scale(0.5)rotate(-8deg);opacity:0}100%{transform:scale(1)rotate(0);opacity:1}}
+.food-card:hover{transform:scale(1.04);}
+.food-emoji{font-size:2.8rem;display:block;margin-bottom:3px;}
+.food-name{font-family:var(--fh);font-weight:800;font-size:1rem;color:#333;}
+
+/* QUIZ */
+.quiz-opts{display:flex;flex-direction:column;gap:9px;width:100%;}
+.quiz-opt{background:var(--white);border-radius:14px;box-shadow:var(--shadow2);padding:12px 16px;cursor:pointer;font-family:var(--fh);font-size:1rem;font-weight:800;border:3px solid #e0e0e0;display:flex;align-items:center;gap:11px;transition:transform .13s,border .13s,background .15s;user-select:none;}
+.quiz-opt:hover{transform:scale(1.02);border-color:#f5a623;background:#fffbf0;}
+.quiz-opt.correct{border-color:#27ae60;background:#e8f8ee;color:#27ae60;animation:correctPop .4s;}
+.quiz-opt.wrong{border-color:#e8453c;background:#ffe8e7;color:#e8453c;animation:shake .35s;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes correctPop{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.quiz-icon{font-size:1.5rem;flex-shrink:0;}
+
+/* BASKETS */
+.baskets-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:100%;}
+.basket{border-radius:16px;padding:12px 8px;text-align:center;cursor:pointer;transition:transform .18s,box-shadow .18s,filter .15s;border:3px solid transparent;user-select:none;min-height:82px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;}
+.basket:hover{transform:scale(1.06);filter:brightness(1.06);}
+.basket:active{transform:scale(.96);}
+.basket-carb{background:var(--carb-l);border-color:var(--carb);}
+.basket-prot{background:var(--prot-l);border-color:var(--prot);}
+.basket-fat{background:var(--fat-l);border-color:var(--fat);}
+.basket-vit{background:var(--vit-l);border-color:var(--vit);}
+.bask-icon{font-size:1.9rem;}
+.bask-label{font-family:var(--fh);font-size:.84rem;font-weight:900;}
+.bask-count{font-size:.75rem;font-weight:800;opacity:.8;}
+
+/* PROGRESS BAR */
+.prog-bar-section{width:100%;background:var(--white);border-radius:12px;box-shadow:var(--shadow2);padding:9px 14px;}
+.prog-bar-title{font-weight:800;font-size:.85rem;color:#666;margin-bottom:5px;}
+.prog-track{display:flex;gap:3px;height:12px;border-radius:50px;overflow:hidden;background:#f0f0f0;}
+.prog-seg{height:100%;border-radius:50px;transition:flex .5s ease;flex:0.05;}
+.prog-carb{background:var(--carb)}.prog-prot{background:var(--prot)}.prog-fat{background:var(--fat)}.prog-vit{background:var(--vit)}
+.prog-labels{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px;}
+.prog-lbl{font-size:.72rem;font-weight:700;display:flex;align-items:center;gap:2px;}
+.prog-dot{width:8px;height:8px;border-radius:50%;}
+
+/* FEEDBACK OVERLAY */
+#feedback-overlay{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.38);backdrop-filter:blur(3px);}
+#feedback-overlay.show{display:flex;}
+.fb-card{background:var(--white);border-radius:26px;box-shadow:0 18px 56px rgba(0,0,0,.2);padding:28px 32px;text-align:center;max-width:360px;width:90%;animation:fbPop .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes fbPop{0%{transform:scale(.5)rotate(-5deg);opacity:0}100%{transform:scale(1)rotate(0);opacity:1}}
+.fb-emoji{font-size:3.6rem;margin-bottom:7px;display:block;}
+.fb-title{font-family:var(--fh);font-size:1.5rem;font-weight:900;margin-bottom:5px;}
+.fb-title.correct{color:#27ae60;}.fb-title.wrong{color:#e8453c;}
+.fb-explain{font-size:.93rem;color:#555;font-weight:600;line-height:1.5;margin-bottom:14px;}
+.fb-pts{font-family:var(--fh);font-size:1.35rem;font-weight:900;margin-bottom:12px;}
+.fb-pts.pos{color:#27ae60;}.fb-pts.neg{color:#e8453c;}
+/* Team indicator in feedback */
+.fb-team-tag{display:inline-flex;align-items:center;gap:6px;border-radius:50px;padding:4px 14px;font-family:var(--fh);font-size:.88rem;font-weight:800;color:#fff;margin-bottom:10px;}
+
+/* RESULT SCREEN */
+#s-result{justify-content:flex-start;padding:8px 0 80px;}
+#s-result .card{text-align:center;max-width:480px;margin-top:10px;}
+.res-emoji{font-size:4.5rem;display:block;animation:resBounce .6s ease-in-out infinite alternate;}
+@keyframes resBounce{0%{transform:scale(1)}100%{transform:scale(1.14)}}
+.res-title{font-family:var(--fh);font-size:1.9rem;font-weight:900;color:#e8453c;margin-bottom:4px;}
+.res-sub{font-size:.93rem;color:#888;font-weight:600;margin-bottom:16px;}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin-bottom:16px;}
+.podium-col{display:flex;flex-direction:column;align-items:center;gap:3px;}
+.pod-medal{font-size:1.3rem;}.pod-name{font-weight:800;font-size:.83rem;color:#333;}.pod-score{font-family:var(--fh);font-weight:900;font-size:1rem;}
+.pod-bar{border-radius:9px 9px 0 0;width:68px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;}
+.result-rank{background:#fff9f0;border-radius:14px;padding:12px 16px;margin-bottom:14px;}
+.rr-title{font-weight:800;color:#666;font-size:.9rem;margin-bottom:9px;}
+.rr-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1.5px dashed #f0e0c8;font-weight:700;font-size:.88rem;}
+.rr-row:last-child{border:none;}
+.rr-label{display:flex;align-items:center;gap:7px;}
+.mom-msg{font-size:.93rem;color:#555;font-style:italic;font-weight:600;margin-bottom:14px;background:#e8f5e9;border-radius:11px;padding:9px 14px;}
+
+/* EXT Q */
+#ext-q{position:fixed;inset:0;z-index:800;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.42);backdrop-filter:blur(4px);}
+#ext-q.show{display:flex;}
+.extq-card{background:var(--white);border-radius:26px;box-shadow:var(--shadow);padding:28px 24px;max-width:380px;width:92%;text-align:center;}
+.extq-title{font-family:var(--fh);font-size:1.2rem;font-weight:900;color:#9b59b6;margin-bottom:11px;}
+.extq-q{font-size:1rem;font-weight:700;color:#333;margin-bottom:12px;line-height:1.5;}
+.extq-ans{display:flex;flex-direction:column;gap:7px;margin-bottom:15px;}
+.extq-a{background:#f8f0ff;border-radius:10px;padding:9px 13px;font-size:.92rem;font-weight:700;color:#555;text-align:left;border-left:4px solid #9b59b6;}
+
+/* CONFETTI & FLOAT */
+#confetti-layer{position:fixed;inset:0;pointer-events:none;z-index:9000;overflow:hidden;}
+.cf{position:absolute;top:-20px;animation:cfFall linear forwards;}
+@keyframes cfFall{0%{transform:translateY(0)rotate(0);opacity:1}100%{transform:translateY(110vh)rotate(720deg);opacity:0}}
+.score-float{position:fixed;font-family:var(--fh);font-size:1.5rem;font-weight:900;pointer-events:none;z-index:700;animation:sfloat 1.2s ease-out forwards;}
+@keyframes sfloat{0%{opacity:1;transform:translateY(0)scale(1)}100%{opacity:0;transform:translateY(-70px)scale(1.35)}}
+
+/* MUTE BTN */
+#btn-mute{position:fixed;bottom:14px;right:14px;z-index:999;background:rgba(255,255,255,.92);border:2.5px solid #f0e0c8;border-radius:50%;width:44px;height:44px;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow2);transition:.2s;}
+#btn-mute:hover{transform:scale(1.1);}
+
+/* ROUND 5 */
+.r5-tray{width:100%;background:linear-gradient(135deg,#fff9f0,#fff3d6);border-radius:18px;box-shadow:var(--shadow);padding:14px 12px;border:3px solid var(--carb);transition:border-color .4s,box-shadow .4s;}
+.r5-tray.ok{border-color:#27ae60;box-shadow:0 0 0 4px #27ae6044,var(--shadow);}
+.r5-tray-title{font-family:var(--fh);font-size:.95rem;font-weight:900;color:var(--carb);margin-bottom:9px;text-align:center;}
+.r5-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;min-height:74px;}
+.r5-slot{border:2.5px dashed #f5a62366;border-radius:12px;min-height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff8ee;font-size:.75rem;color:#ccc;font-weight:700;position:relative;transition:.18s;cursor:default;}
+.r5-slot.filled{border-style:solid;border-color:#e0e0e0;background:var(--white);}
+.r5-slot .se{font-size:1.7rem;display:block;}
+.r5-slot .sn{font-size:.67rem;font-weight:800;color:#555;margin-top:1px;text-align:center;}
+.r5-slot .sr{position:absolute;top:-7px;right:-7px;width:19px;height:19px;background:#e8453c;border-radius:50%;color:#fff;font-size:.7rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;border:2px solid #fff;}
+.r5-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;justify-content:center;}
+.r5-badge{display:flex;align-items:center;gap:3px;border-radius:50px;padding:4px 10px;font-size:.77rem;font-weight:800;border:2px solid;transition:.25s;}
+.r5-badge.met{border-color:#27ae60;background:#e8f8ee;color:#27ae60;}
+.r5-badge.unmet{border-color:#ddd;background:#f5f5f5;color:#bbb;}
+.r5-pool{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;width:100%;}
+.r5-food{display:flex;flex-direction:column;align-items:center;background:var(--white);border-radius:14px;box-shadow:var(--shadow2);padding:9px 12px;cursor:pointer;border:3px solid #e0e0e0;transition:transform .13s,box-shadow .13s,opacity .18s;min-width:68px;}
+.r5-food:hover{transform:scale(1.07) rotate(1deg);box-shadow:var(--shadow);}
+.r5-food.used{opacity:.3;pointer-events:none;border-style:dashed;}
+.r5-food .fe{font-size:1.85rem;display:block;}
+.r5-food .fn{font-size:.68rem;font-weight:800;color:#555;margin-top:2px;text-align:center;}
+.r5-food .fg{font-size:.62rem;font-weight:700;margin-top:1px;}
+.r5-mom-tip{background:var(--white);border-radius:16px 16px 16px 4px;box-shadow:var(--shadow2);padding:9px 14px;font-size:.9rem;font-weight:700;color:#333;max-width:260px;border-left:4px solid var(--pink);display:none;animation:fbPop .3s cubic-bezier(.34,1.56,.64,1);}
+.r5-mom-tip.show{display:block;}
+/* R5 team turn indicator */
+.r5-team-banner{width:100%;text-align:center;background:linear-gradient(135deg,#fff9f0,#ffe8cc);border-radius:14px;padding:8px 14px;border:2px solid #f5a62366;font-family:var(--fh);font-size:.95rem;font-weight:900;}
+
+/* ROUND 6 – SIÊU ĐẦU BẾP */
+.r6-scenario{width:100%;background:linear-gradient(135deg,#e0f7fa,#b2ebf2);border-radius:18px;box-shadow:var(--shadow);padding:14px 16px;text-align:center;border:3px solid var(--cyan);}
+.r6-chars{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px;}
+.r6-char{font-size:3.2rem;animation:charBounce .9s ease-in-out infinite alternate;display:inline-block;}
+@keyframes charBounce{0%{transform:scale(1)}100%{transform:scale(1.08)translateY(-4px)}}
+.r6-char.rescued{animation:rescued .5s forwards;}
+@keyframes rescued{0%{transform:scale(1)}50%{transform:scale(1.4)}100%{transform:scale(1)rotate(8deg)}}
+.r6-problem{font-family:var(--fh);font-size:.98rem;font-weight:900;color:#00838f;}
+.r6-hint{font-size:.83rem;color:#555;font-weight:700;margin-top:3px;}
+.r6-timer-row{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;}
+.r6-ring{width:68px;height:68px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:1.8rem;font-weight:900;color:#e8453c;}
+.r6-ring svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+.r6-ring circle{fill:none;stroke:#f0f0f0;stroke-width:5;}
+.r6-ring .rp{stroke:#e8453c;stroke-width:5;stroke-linecap:round;stroke-dasharray:196;}
+.r6-combo{background:linear-gradient(135deg,#ff6b35,#f7c59f);border-radius:50px;padding:5px 14px;font-family:var(--fh);font-size:.9rem;font-weight:900;color:#fff;box-shadow:0 3px 0 rgba(255,107,53,.28);transition:.2s;}
+.r6-combo.fire{background:linear-gradient(135deg,#e8453c,#f5a623);animation:comboFlash .3s;}
+@keyframes comboFlash{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+.r6-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;}
+.r6-opt{display:flex;flex-direction:column;align-items:center;background:var(--white);border-radius:14px;box-shadow:var(--shadow2);padding:11px 7px;cursor:pointer;border:3px solid #e0e0e0;transition:transform .13s,box-shadow .13s;user-select:none;}
+.r6-opt:hover{transform:scale(1.06);box-shadow:var(--shadow);border-color:var(--cyan);}
+.r6-opt.ok{border-color:#27ae60;background:#e8f8ee;animation:correctPop .4s;}
+.r6-opt.bad{border-color:#e8453c;background:#ffe8e7;animation:shake .35s;}
+.r6-opt .oe{font-size:2rem;display:block;}
+.r6-opt .on{font-size:.72rem;font-weight:800;color:#444;margin-top:3px;text-align:center;}
+.r6-progress{display:flex;gap:5px;justify-content:center;width:100%;}
+.r6-dot{width:13px;height:13px;border-radius:50%;background:#e0e0e0;border:2px solid #ccc;transition:.25s;}
+.r6-dot.done{background:#27ae60;border-color:#27ae60;}
+.r6-dot.curr{background:var(--cyan);border-color:var(--cyan);animation:dotPulse .8s infinite;}
+@keyframes dotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+/* R6 timer ring flashing at end */
+.r6-ring.urgent .rp{stroke:#f5a623;}
+.r6-ring.critical .rp{stroke:#e8453c;animation:ringFlash .4s infinite;}
+@keyframes ringFlash{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* POWER UP */
+.powerup{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)scale(0);font-size:2.8rem;z-index:901;pointer-events:none;animation:puAnim .8s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes puAnim{0%{transform:translate(-50%,-50%)scale(0);opacity:1}80%{transform:translate(-50%,-80%)scale(1.3);opacity:1}100%{transform:translate(-50%,-100%)scale(1);opacity:0}}
+
+/* TEAM TURN BANNER (floating) */
+.turn-banner{position:fixed;top:50px;left:50%;transform:translateX(-50%);z-index:550;background:var(--white);border-radius:50px;box-shadow:var(--shadow);padding:7px 20px;font-family:var(--fh);font-size:.92rem;font-weight:900;white-space:nowrap;animation:bannerSlide .4s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes bannerSlide{0%{opacity:0;transform:translateX(-50%) translateY(-20px)}100%{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:420px){
+  .card{padding:16px 14px;}
+  .logo-title{font-size:1.6rem;}
+  .baskets-grid{gap:7px;}
+  .basket{padding:9px 6px;min-height:74px;}
+  .bask-icon{font-size:1.6rem;}
+  .bask-label{font-size:.78rem;}
+  .r6-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
+  .r6-opt .oe{font-size:1.7rem;}
+}
+</style>
+</head>
+<body>
+
+<button id="btn-mute" title="Bật/tắt âm thanh">🔊</button>
+<div id="confetti-layer"></div>
+
+<!-- FEEDBACK OVERLAY -->
+<div id="feedback-overlay">
+  <div class="fb-card">
+    <div class="fb-team-tag" id="fb-team-tag"></div>
+    <span class="fb-emoji" id="fb-emoji"></span>
+    <div class="fb-title" id="fb-title"></div>
+    <div class="fb-explain" id="fb-explain"></div>
+    <div class="fb-pts" id="fb-pts"></div>
+    <button class="btn btn-green btn-sm" id="fb-next-btn">Tiếp theo →</button>
+  </div>
+</div>
+
+<!-- EXT Q POPUP -->
+<div id="ext-q">
+  <div class="extq-card">
+    <div class="extq-title">🧠 Câu hỏi mở rộng!</div>
+    <div class="extq-q">"Nếu chỉ ăn cơm mà không ăn rau thì sao?"</div>
+    <div class="extq-ans">
+      <div class="extq-a">🥦 Cơ thể sẽ thiếu vitamin & khoáng chất</div>
+      <div class="extq-a">😴 Dễ mệt mỏi, thiếu sức đề kháng</div>
+      <div class="extq-a">🌿 Hệ tiêu hóa kém hoạt động</div>
+      <div class="extq-a">🌈 Bữa ăn cần đa dạng đủ 4 nhóm chất!</div>
+    </div>
+    <button class="btn btn-purple" onclick="document.getElementById('ext-q').classList.remove('show')">✅ Hiểu rồi!</button>
+  </div>
+</div>
+
+<!-- SCOREBAR -->
+<div id="scorebar">
+  <div class="sb-team" id="sb-t0"><div class="sb-badge" id="sb-b0"></div><span class="sb-name" id="sb-n0">Đội 1</span><span class="sb-score" id="sb-s0">0</span></div>
+  <div class="sb-sep"></div>
+  <div class="sb-team" id="sb-t1"><div class="sb-badge" id="sb-b1"></div><span class="sb-name" id="sb-n1">Đội 2</span><span class="sb-score" id="sb-s1">0</span></div>
+  <div class="sb-sep"></div>
+  <div class="sb-team" id="sb-t2"><div class="sb-badge" id="sb-b2"></div><span class="sb-name" id="sb-n2">Đội 3</span><span class="sb-score" id="sb-s2">0</span></div>
+  <div class="sb-sep"></div>
+  <div class="sb-round" id="sb-round">Vòng 1</div>
+  <div class="sb-timer-wrap"><span>⏱</span><span class="sb-timer" id="sb-timer">90</span><div class="sb-tbar"><div class="sb-tfill" id="sb-tfill" style="width:100%"></div></div></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="deco-stall s1" style="left:2%"><div class="awn"></div><div class="bod">🍎</div></div>
+  <div class="deco-stall s2" style="left:18%"><div class="awn"></div><div class="bod">🥩</div></div>
+  <div class="deco-stall s3" style="right:2%"><div class="awn"></div><div class="bod">🥗</div></div>
+  <div class="lantern" style="top:5%;left:38%;animation-delay:0s"></div>
+  <div class="lantern" style="top:5%;left:53%;animation-delay:1.1s"></div>
+  <div class="lantern" style="top:5%;left:24%;animation-delay:.5s"></div>
+
+  <!-- LOADING -->
+  <div class="screen active" id="s-loading">
+    <div class="ld-icon">🍱</div>
+    <div class="ld-text">Đang chuẩn bị bữa ăn...</div>
+    <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+  </div>
+
+  <!-- START – button at top, visible! -->
+  <div class="screen" id="s-start">
+    <div class="card" style="margin-top:10px">
+      <div style="text-align:center">
+        <div class="logo-emoji">🛒</div>
+        <div class="logo-title">Đi Chợ Giúp Mẹ!</div>
+        <div class="logo-sub">Khoa học lớp 4 · Dinh dưỡng cân bằng · 6 vòng chơi</div>
+      </div>
+      <!-- START BUTTON AT TOP -->
+      <div class="start-btn-wrap">
+        <div class="start-btn-label">▼ Nhấn để bắt đầu ngay!</div>
+        <button class="btn btn-orange btn-lg" onclick="startGame()">🚀 BẮT ĐẦU CHƠI!</button>
+      </div>
+      <div style="height:10px"></div>
+      <div class="mom-intro">👩 <strong>Mẹ nói:</strong> "Con ơi, mẹ nhờ con đi chợ chuẩn bị bữa cơm gia đình nhé 🍲 Phải chọn đúng thực phẩm để cả nhà khỏe mạnh!"</div>
+      <div class="team-lbl">🏆 Nhập tên các đội (không bắt buộc):</div>
+      <div class="team-rows">
+        <div class="team-row"><div class="team-badge" style="background:linear-gradient(135deg,#f5a623,#e8453c)">1</div><input class="team-input" id="t0" placeholder="Tên Đội 1" value="Đội Cam" maxlength="16"></div>
+        <div class="team-row"><div class="team-badge" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">2</div><input class="team-input" id="t1" placeholder="Tên Đội 2" value="Đội Xanh" maxlength="16"></div>
+        <div class="team-row"><div class="team-badge" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">3</div><input class="team-input" id="t2" placeholder="Tên Đội 3" value="Đội Lá" maxlength="16"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAP -->
+  <div class="screen" id="s-map">
+    <div class="card" style="margin-top:10px">
+      <div class="map-title">🗺️ Bản Đồ Hành Trình</div>
+      <div class="map-nodes" id="map-nodes"></div>
+      <div class="map-action">
+        <button class="btn btn-green" id="btn-enter" onclick="enterRound()">🚀 Vào Vòng Này!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAY -->
+  <div class="screen" id="s-play">
+    <div class="play-wrap" id="play-wrap"></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="s-result">
+    <div class="card" style="margin-top:10px">
+      <span class="res-emoji" id="res-emoji">🏆</span>
+      <div class="res-title">Kết Quả Cuộc Thi!</div>
+      <div class="res-sub">Cả nhà đã có bữa ăn ngon!</div>
+      <div class="podium" id="podium"></div>
+      <div class="result-rank">
+        <div class="rr-title">📊 Bảng Xếp Hạng</div>
+        <div id="rank-rows"></div>
+      </div>
+      <div class="mom-msg" id="mom-msg"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <button class="btn btn-orange btn-sm" onclick="document.getElementById('ext-q').classList.add('show')">🧠 Câu hỏi thêm</button>
+        <button class="btn btn-blue btn-sm" onclick="restartGame()">🔄 Chơi Lại</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════ DATA ═══════════════════ */
+const G = {
+  carb:{name:'Chất bột đường',color:'#f5a623',light:'#fff8e1',icon:'🌾',cls:'carb'},
+  prot:{name:'Chất đạm',color:'#e8453c',light:'#ffe8e7',icon:'🥩',cls:'prot'},
+  fat:{name:'Chất béo',color:'#9b59b6',light:'#f3e8ff',icon:'🧈',cls:'fat'},
+  vit:{name:'Vitamin & Khoáng',color:'#27ae60',light:'#e8f8ee',icon:'🥦',cls:'vit'}
+};
+
+// EXPANDED FOOD LIST – diverse across all rounds
+const FOODS_R1 = [
+  // Vòng 1 – nhận biết cơ bản, phổ biến
+  {id:'com',name:'Cơm trắng',emoji:'🍚',group:'carb',explain:'Cơm thuộc nhóm bột đường → cung cấp năng lượng cho cả ngày!'},
+  {id:'banh_mi',name:'Bánh mì',emoji:'🍞',group:'carb',explain:'Bánh mì thuộc nhóm bột đường → giàu tinh bột giúp ta hoạt động!'},
+  {id:'thit_heo',name:'Thịt heo',emoji:'🥩',group:'prot',explain:'Thịt heo thuộc nhóm đạm → giúp xây dựng cơ bắp và phát triển!'},
+  {id:'ca_thu',name:'Cá thu',emoji:'🐟',group:'prot',explain:'Cá thu thuộc nhóm đạm → rất tốt cho não bộ và xương!'},
+  {id:'trung_ga',name:'Trứng gà',emoji:'🥚',group:'prot',explain:'Trứng gà thuộc nhóm đạm → nguồn đạm tuyệt vời, đầy đủ axit amin!'},
+  {id:'rau_muong',name:'Rau muống',emoji:'🥬',group:'vit',explain:'Rau muống thuộc nhóm vitamin → giàu sắt, tăng đề kháng!'},
+  {id:'cam_qua',name:'Cam tươi',emoji:'🍊',group:'vit',explain:'Cam thuộc nhóm vitamin C → giúp chống oxy hóa, bảo vệ sức khỏe!'},
+  {id:'dau_an',name:'Dầu ăn',emoji:'🫙',group:'fat',explain:'Dầu ăn thuộc nhóm béo → giúp cơ thể hấp thu vitamin tan trong dầu!'},
+  {id:'bo_lat',name:'Bơ lạt',emoji:'🧈',group:'fat',explain:'Bơ thuộc nhóm béo → cung cấp năng lượng và giúp hòa tan vitamin!'},
+  {id:'khoai_lang',name:'Khoai lang',emoji:'🍠',group:'carb',explain:'Khoai lang thuộc nhóm bột đường → giàu tinh bột và chất xơ!'}
+];
+
+const FOODS_R2 = [
+  // Vòng 2 – phân loại, thêm đa dạng
+  {id:'mi_gao',name:'Mì gạo',emoji:'🍜',group:'carb',explain:'Mì gạo thuộc nhóm bột đường → cung cấp năng lượng nhanh!'},
+  {id:'bun',name:'Bún tươi',emoji:'🍝',group:'carb',explain:'Bún thuộc nhóm bột đường → làm từ gạo, giàu tinh bột!'},
+  {id:'ngo',name:'Ngô (bắp)',emoji:'🌽',group:'carb',explain:'Ngô thuộc nhóm bột đường → giàu tinh bột và chất xơ!'},
+  {id:'dau_hu',name:'Đậu hũ',emoji:'🫘',group:'prot',explain:'Đậu hũ thuộc nhóm đạm → đạm thực vật rất tốt cho sức khỏe!'},
+  {id:'tom_tuoi',name:'Tôm tươi',emoji:'🦐',group:'prot',explain:'Tôm thuộc nhóm đạm → giàu canxi và đạm, tốt cho xương!'},
+  {id:'thit_ga',name:'Thịt gà',emoji:'🍗',group:'prot',explain:'Thịt gà thuộc nhóm đạm → đạm nạc, ít béo, tốt cho cơ thể!'},
+  {id:'ca_rot',name:'Cà rốt',emoji:'🥕',group:'vit',explain:'Cà rốt thuộc nhóm vitamin → giàu beta-carotene, rất tốt cho mắt!'},
+  {id:'co_cai',name:'Cải xanh',emoji:'🥦',group:'vit',explain:'Cải xanh thuộc nhóm vitamin → giàu vitamin C và khoáng chất!'},
+  {id:'chuoi',name:'Chuối chín',emoji:'🍌',group:'vit',explain:'Chuối thuộc nhóm vitamin → giàu kali, tốt cho tim và cơ bắp!'},
+  {id:'pho_mai',name:'Phô mai',emoji:'🧀',group:'fat',explain:'Phô mai thuộc nhóm béo → giàu canxi và chất béo có lợi!'},
+  {id:'hat_dieu',name:'Hạt điều',emoji:'🥜',group:'fat',explain:'Hạt điều thuộc nhóm béo → chứa chất béo tốt và nhiều khoáng chất!'}
+];
+
+const FOODS_R3 = [
+  // Vòng 3 – bữa ăn cân bằng, đa dạng hơn
+  {id:'banh_pho',name:'Bánh phở',emoji:'🍱',group:'carb',explain:'Bánh phở làm từ gạo → thuộc nhóm bột đường, cung cấp năng lượng!'},
+  {id:'khoai_tay',name:'Khoai tây',emoji:'🥔',group:'carb',explain:'Khoai tây thuộc nhóm bột đường → giàu tinh bột và vitamin C!'},
+  {id:'banh_gao',name:'Bánh gạo',emoji:'🫓',group:'carb',explain:'Bánh gạo thuộc nhóm bột đường → ít chất béo, cung cấp năng lượng!'},
+  {id:'ca_hoi',name:'Cá hồi',emoji:'🐠',group:'prot',explain:'Cá hồi thuộc nhóm đạm → giàu omega-3, rất tốt cho não bộ!'},
+  {id:'muc',name:'Mực tươi',emoji:'🦑',group:'prot',explain:'Mực thuộc nhóm đạm → ít calo, nhiều đạm và khoáng chất!'},
+  {id:'thit_bo',name:'Thịt bò',emoji:'🥩',group:'prot',explain:'Thịt bò thuộc nhóm đạm → giàu sắt và đạm, giúp tăng cơ bắp!'},
+  {id:'dau_xanh',name:'Đậu xanh',emoji:'🫘',group:'prot',explain:'Đậu xanh thuộc nhóm đạm → đạm thực vật, giàu chất xơ!'},
+  {id:'rau_bina',name:'Rau bina',emoji:'🌿',group:'vit',explain:'Rau bina thuộc nhóm vitamin → siêu thực phẩm giàu sắt và vitamin K!'},
+  {id:'dua_leo',name:'Dưa leo',emoji:'🥒',group:'vit',explain:'Dưa leo thuộc nhóm vitamin → giàu nước, vitamin K và khoáng chất!'},
+  {id:'xoai',name:'Xoài chín',emoji:'🥭',group:'vit',explain:'Xoài thuộc nhóm vitamin → giàu vitamin A và C, ngon và bổ!'},
+  {id:'dua_hau',name:'Dưa hấu',emoji:'🍉',group:'vit',explain:'Dưa hấu thuộc nhóm vitamin → giàu lycopene và vitamin C!'},
+  {id:'dau_nanh',name:'Dầu mè',emoji:'🫙',group:'fat',explain:'Dầu mè thuộc nhóm béo → giàu axit béo không no có lợi cho tim!'},
+  {id:'bo_qua',name:'Bơ quả',emoji:'🥑',group:'fat',explain:'Bơ quả thuộc nhóm béo → chứa chất béo tốt, vitamin E và kali!'}
+];
+
+// Master pool for R4 (mix of all)
+const FOODS_R4 = [...FOODS_R1, ...FOODS_R2, ...FOODS_R3].filter((f,i,a)=>a.findIndex(x=>x.id===f.id)===i);
+
+const ROUNDS = [
+  {id:1,name:'Làm quen nhóm chất',icon:'🎯',color:'#f5a623',bg:'#fff8e1',desc:'Trả lời nhanh: thực phẩm này thuộc nhóm nào?'},
+  {id:2,name:'Phân loại thực phẩm',icon:'🛒',color:'#e8453c',bg:'#ffe8e7',desc:'Nhấn vào giỏ đúng để bỏ thực phẩm vào!'},
+  {id:3,name:'Bữa ăn cân bằng',icon:'🍱',color:'#9b59b6',bg:'#f3e8ff',desc:'Phân loại thực phẩm để bữa ăn đủ 4 nhóm!'},
+  {id:4,name:'Master Test 🔥',icon:'🏆',color:'#27ae60',bg:'#e8f8ee',desc:'Thử thách tổng hợp – điểm x2! Nhiều loại thực phẩm mới!'},
+  {id:5,name:'Nhà Dinh Dưỡng Nhí',icon:'🧠',color:'#e91e8c',bg:'#fce4ec',desc:'Tự xây bữa ăn hoàn chỉnh đủ 4 nhóm chất! (3 lượt)'},
+  {id:6,name:'Siêu Đầu Bếp ⚡',icon:'👨‍🍳',color:'#00bcd4',bg:'#e0f7fa',desc:'Giải cứu sức khỏe! Chọn đúng trong 10 giây!'}
+];
+
+/* ═══════════════════ STATE ═══════════════════ */
+const state = {
+  teams:[
+    {name:'Đội Cam',score:0,combo:0},
+    {name:'Đội Xanh',score:0,combo:0},
+    {name:'Đội Lá',score:0,combo:0}
+  ],
+  tColors:['linear-gradient(135deg,#f5a623,#e8453c)','linear-gradient(135deg,#4facfe,#00f2fe)','linear-gradient(135deg,#43e97b,#38f9d7)'],
+  tBadge:['#f5a623','#4facfe','#43e97b'],
+  curTeam:0,curRound:0,
+  roundDone:[false,false,false,false,false,false],
+  muted:false,
+  timerMax:90,timerLeft:90,timerInterval:null,
+  roundFoods:[],foodIdx:0,
+  mealCounts:{carb:0,prot:0,fat:0,vit:0},
+  answered:false,
+  onNext:null,curFood:null,mult:1,
+  // r5 – 3 teams each play once
+  r5sel:[],r5teamsDone:0,r5teamResults:[],
+  // r6
+  r6scenes:[],r6idx:0,r6combo:0,r6cdTimer:null,r6teamsDone:0
+};
+
+/* ═══════════════════ UTILS ═══════════════════ */
+function shuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function $(id){return document.getElementById(id);}
+
+/* ═══════════════════ LOADING ═══════════════════ */
+window.addEventListener('load',()=>{
+  setTimeout(()=>{$('s-loading').classList.remove('active');$('s-start').classList.add('active');},1300);
+});
+
+/* ═══════════════════ START ═══════════════════ */
+function startGame(){
+  ['t0','t1','t2'].forEach((id,i)=>{const v=$(id).value.trim();if(v)state.teams[i].name=v;});
+  state.teams.forEach(t=>{t.score=0;t.combo=0;});
+  state.curTeam=0;state.curRound=0;
+  state.roundDone=[false,false,false,false,false,false];
+  state.mealCounts={carb:0,prot:0,fat:0,vit:0};
+  setupSB();showScreen('s-map');renderMap();
+}
+
+/* ═══════════════════ SCOREBAR ═══════════════════ */
+function setupSB(){
+  $('scorebar').style.display='flex';
+  state.teams.forEach((t,i)=>{$('sb-n'+i).textContent=t.name;$('sb-b'+i).style.background=state.tBadge[i];$('sb-b'+i).textContent=i+1;});
+  updateSB();
+}
+function updateSB(){
+  state.teams.forEach((t,i)=>{$('sb-s'+i).textContent=t.score;$('sb-t'+i).classList.toggle('active',i===state.curTeam);});
+  $('sb-round').textContent='Vòng '+(state.curRound+1);
+}
+
+/* ═══════════════════ TIMER ═══════════════════ */
+function startTimer(max){
+  clearInterval(state.timerInterval);
+  state.timerMax=max;state.timerLeft=max;updateTimerUI();
+  state.timerInterval=setInterval(()=>{
+    state.timerLeft--;updateTimerUI();
+    if(state.timerLeft<=0){clearInterval(state.timerInterval);timerEnd();}
+  },1000);
+}
+function stopTimer(){clearInterval(state.timerInterval);}
+function updateTimerUI(){
+  const n=$('sb-timer'),f=$('sb-tfill');if(!n||!f)return;
+  n.textContent=state.timerLeft;
+  const p=(state.timerLeft/state.timerMax)*100;
+  f.style.width=p+'%';
+  if(p<=25){f.style.background='linear-gradient(90deg,#e8453c,#ff6b6b)';n.style.color='#e8453c';}
+  else if(p<=50){f.style.background='linear-gradient(90deg,#f5a623,#ffd32a)';n.style.color='#f5a623';}
+  else{f.style.background='linear-gradient(90deg,#43e97b,#f5a623)';n.style.color='#333';}
+}
+function timerEnd(){
+  if(state.curRound<4){
+    showFeedback(false,'⏰','Hết giờ!','Cẩn thận hơn nhé!',0,()=>{
+      nextTeam();
+      if(state.curRound===0)showR1Q(state.mult);
+      else if(state.curRound===1)showR2Food(state.mult);
+      else if(state.curRound===2)showR3Food(state.mult);
+      else if(state.curRound===3)showR4Q(state.mult);
+    });
+  }
+}
+
+/* ═══════════════════ MAP ═══════════════════ */
+function renderMap(){
+  const c=$('map-nodes');c.innerHTML='';
+  ROUNDS.forEach((r,i)=>{
+    const done=state.roundDone[i],curr=i===state.curRound,locked=i>state.curRound;
+    const node=document.createElement('div');
+    node.className='map-node'+(locked?' locked':' unlocked')+(done?' done':'')+(curr?' current':'');
+    node.style.background=r.bg;node.style.borderColor=r.color;
+    node.style.setProperty('--nc',r.color);
+    node.innerHTML=`
+      <div class="node-icon">${done?'✅':r.icon}</div>
+      <div class="node-info">
+        <div class="node-num">Vòng ${r.id}</div>
+        <div class="node-name">${r.name}</div>
+        <div class="node-status" style="color:${r.color}">${done?'✓ Hoàn thành!':curr?'▶ Đang mở':'🔒 Chưa mở'}</div>
+      </div>
+      <div class="node-arrow">${done?'🏅':curr?'👉':'🔒'}</div>`;
+    if(!locked&&!done)node.onclick=()=>{state.curRound=i;renderMap();};
+    c.appendChild(node);
+  });
+}
+function enterRound(){
+  if(state.roundDone[state.curRound]){
+    const next=state.roundDone.findIndex((d,i)=>!d&&i>=state.curRound);
+    if(next===-1){endGame();return;}
+    state.curRound=next;renderMap();return;
+  }
+  sndPop();showScreen('s-play');launchRound(state.curRound);
+}
+
+/* ═══════════════════ LAUNCH ROUND ═══════════════════ */
+function launchRound(idx){
+  state.mealCounts={carb:0,prot:0,fat:0,vit:0};
+  state.answered=false;state.mult=idx===3?2:1;
+  if(idx===0)launchR1(state.mult);
+  else if(idx===1)launchR2(state.mult);
+  else if(idx===2)launchR3(state.mult);
+  else if(idx===3)launchR4(state.mult);
+  else if(idx===4)launchR5();
+  else if(idx===5)launchR6();
+}
+
+/* ═══════════════════ ROUND COMPLETE / END ═══════════════════ */
+function roundComplete(){
+  stopTimer();
+  if(state.r6cdTimer){clearInterval(state.r6cdTimer);state.r6cdTimer=null;}
+  state.roundDone[state.curRound]=true;
+  sndOk();confetti(30);
+  $('feedback-overlay').classList.remove('show');
+  const next=state.roundDone.findIndex(d=>!d);
+  if(next===-1){setTimeout(endGame,600);return;}
+  state.curRound=next;
+  setTimeout(()=>{showScreen('s-map');renderMap();updateSB();},600);
+}
+function endGame(){
+  stopTimer();
+  $('scorebar').style.display='none';
+  showScreen('s-result');
+  const sorted=[...state.teams].sort((a,b)=>b.score-a.score);
+  const medals=['🥇','🥈','🥉'],heights=[88,68,52];
+  const order=[1,0,2];
+  $('podium').innerHTML='';
+  order.forEach((ri,pi)=>{
+    const t=sorted[ri];if(!t)return;
+    const col=document.createElement('div');col.className='podium-col';
+    col.innerHTML=`<div class="pod-medal">${medals[ri]}</div><div class="pod-name">${t.name}</div><div class="pod-score" style="color:#e8453c">${t.score}đ</div><div class="pod-bar" style="height:${heights[pi]}px;background:${['#ffe082','#f5a623','#b0bec5'][ri]}">${medals[ri]}</div>`;
+    $('podium').appendChild(col);
+  });
+  const total=state.teams.reduce((a,b)=>a+b.score,0)||1;
+  $('rank-rows').innerHTML=sorted.map((t,i)=>{
+    const pct=t.score/total*100;
+    const rank=pct>=60?'⭐ Xuất sắc':pct>=35?'👍 Tốt':'💪 Cố gắng';
+    return `<div class="rr-row"><span class="rr-label"><span>${medals[i]}</span>${t.name}</span><span>${t.score}đ – ${rank}</span></div>`;
+  }).join('');
+  const msgs=['Con đã chuẩn bị bữa ăn rất tốt! Mẹ tự hào lắm! 👩❤️','Cả nhà được bữa ăn ngon nhờ con! 🍲','Con hiểu dinh dưỡng rồi! Nhớ ăn đủ 4 nhóm nhé! 🥗'];
+  $('mom-msg').textContent='👩 Mẹ nói: "'+pick(msgs)+'"';
+  $('res-emoji').textContent=sorted[0].score>=80?'🏆':sorted[0].score>=40?'🌟':'🌱';
+  confetti(55);sndOk();
+}
+function restartGame(){
+  $('scorebar').style.display='flex';
+  showScreen('s-start');
+}
+function nextTeam(){state.curTeam=(state.curTeam+1)%3;updateSB();}
+
+/* ═══════════════════ FEEDBACK ═══════════════════ */
+let fbTimeout=null;
+function showFeedback(ok,emoji,title,explain,pts,onDone){
+  clearTimeout(fbTimeout);
+  const team=state.teams[state.curTeam];
+  const tag=$('fb-team-tag');
+  tag.textContent='🎮 Đội: '+team.name;
+  tag.style.background=state.tBadge[state.curTeam];
+  $('fb-emoji').textContent=emoji;
+  $('fb-title').textContent=title;
+  $('fb-title').className='fb-title '+(ok?'correct':'wrong');
+  $('fb-explain').textContent=explain;
+  $('fb-pts').textContent=pts>0?'+'+pts+' điểm 🌟':'';
+  $('fb-pts').className='fb-pts '+(pts>0?'pos':'neg');
+  $('feedback-overlay').classList.add('show');
+  const btn=$('fb-next-btn');
+  const newBtn=btn.cloneNode(true);
+  btn.parentNode.replaceChild(newBtn,btn);
+  const proceed=()=>{clearTimeout(fbTimeout);$('feedback-overlay').classList.remove('show');if(onDone)onDone();};
+  newBtn.addEventListener('click',proceed);
+  fbTimeout=setTimeout(proceed,2800);
+}
+
+/* ═══════════════════ ANSWER HANDLER (R1-4) ═══════════════════ */
+function handleAnswer(ok,food,mult,onNext){
+  stopTimer();
+  const bonus=state.timerLeft>=70?5:state.timerLeft>=40?3:0;
+  const team=state.teams[state.curTeam];
+  if(ok){
+    team.combo=(team.combo||0)+1;
+    const cm=team.combo>=3?2:1;
+    const pts=(10+bonus)*mult*cm;
+    team.score+=pts;updateSB();
+    floatScore('+'+pts+(cm>1?' 🔥':''),'#27ae60');
+    showFeedback(true,'🎉','Đúng rồi! Giỏi quá!',food.explain,pts,()=>{nextTeam();startTimer(state.timerMax);if(onNext)onNext();});
+    sndOk();confetti(14);
+  }else{
+    team.combo=0;team.score=Math.max(0,team.score-5);updateSB();
+    floatScore('-5','#e8453c');
+    showFeedback(false,'😅','Chưa đúng!',food.explain,0,()=>{nextTeam();startTimer(state.timerMax);if(onNext)onNext();});
+    sndBad();
+  }
+}
+
+/* ═══════════════════ PROGRESS BAR ═══════════════════ */
+function progBarHTML(){
+  return `<div class="prog-bar-section">
+    <div class="prog-bar-title">🍱 Bữa ăn cân bằng</div>
+    <div class="prog-track" id="prog-track">
+      <div class="prog-seg prog-carb" id="pg-carb"></div>
+      <div class="prog-seg prog-prot" id="pg-prot"></div>
+      <div class="prog-seg prog-fat" id="pg-fat"></div>
+      <div class="prog-seg prog-vit" id="pg-vit"></div>
+    </div>
+    <div class="prog-labels">
+      ${Object.entries(G).map(([k,g])=>`<div class="prog-lbl"><div class="prog-dot" style="background:${g.color}"></div>${g.name.split(' ').slice(1).join(' ')||g.name}</div>`).join('')}
+    </div>
+  </div>`;
+}
+function updateProgBar(){
+  Object.keys(G).forEach(k=>{const el=$('pg-'+k);if(el)el.style.flex=state.mealCounts[k]>0?state.mealCounts[k]:0.05;});
+  const all=Object.values(state.mealCounts).every(v=>v>0);
+  const t=$('prog-track');if(all&&t){t.style.boxShadow='0 0 0 3px #27ae60';confetti(18);}
+}
+
+/* ═══════════════════ ROUND 1 – Quick Quiz ═══════════════════ */
+function launchR1(mult){
+  state.roundFoods=shuffle([...FOODS_R1]).slice(0,6);
+  state.foodIdx=0;state.answered=false;
+  startTimer(90);showR1Q(mult);
+}
+function showR1Q(mult){
+  if(state.foodIdx>=state.roundFoods.length){roundComplete();return;}
+  const f=state.roundFoods[state.foodIdx];
+  const r=ROUNDS[0];
+  const opts=shuffle(Object.keys(G));
+  const pw=$('play-wrap');
+  pw.innerHTML=`
+    <div class="round-hdr">
+      <div class="round-hdr-title">${r.icon} ${r.name}</div>
+      <div class="round-hdr-sub">${r.desc} · Câu ${state.foodIdx+1}/${state.roundFoods.length} · Đội: <strong style="color:${state.tBadge[state.curTeam]}">${state.teams[state.curTeam].name}</strong></div>
+    </div>
+    <div class="mom-row">
+      <div class="mom-char">👩</div>
+      <div class="mom-bubble">Thực phẩm <strong>${f.name}</strong> thuộc nhóm nào nhỉ?</div>
+    </div>
+    <div class="food-stage">
+      <div class="food-card" style="border-color:${G[f.group].color}">
+        <span class="food-emoji">${f.emoji}</span>
+        <div class="food-name">${f.name}</div>
+      </div>
+    </div>
+    <div class="quiz-opts" id="quiz-opts"></div>
+    ${progBarHTML()}`;
+  updateProgBar();
+  const oc=$('quiz-opts');
+  opts.forEach(gk=>{
+    const g=G[gk];
+    const btn=document.createElement('div');
+    btn.className='quiz-opt';btn.dataset.gk=gk;
+    btn.style.borderLeft=`5px solid ${g.color}`;
+    btn.innerHTML=`<span class="quiz-icon">${g.icon}</span>${g.name}`;
+    btn.onclick=()=>{
+      if(state.answered)return;state.answered=true;
+      const ok=gk===f.group;
+      btn.classList.add(ok?'correct':'wrong');
+      if(!ok)oc.querySelectorAll('.quiz-opt').forEach(b=>{if(b.dataset.gk===f.group)b.classList.add('correct');});
+      oc.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      handleAnswer(ok,f,mult,()=>{state.foodIdx++;state.answered=false;showR1Q(mult);});
+    };
+    oc.appendChild(btn);
+  });
+}
+
+/* ═══════════════════ ROUND 2 – Basket ═══════════════════ */
+function launchR2(mult){
+  state.roundFoods=shuffle([...FOODS_R2]).slice(0,7);
+  state.foodIdx=0;state.answered=false;
+  startTimer(100);showR2Food(mult);
+}
+function showR2Food(mult){
+  if(state.foodIdx>=state.roundFoods.length){roundComplete();return;}
+  renderBasketUI(state.roundFoods[state.foodIdx],mult,ROUNDS[1],()=>{state.foodIdx++;state.answered=false;showR2Food(mult);});
+}
+
+/* ═══════════════════ ROUND 3 – Balanced Meal ═══════════════════ */
+function launchR3(mult){
+  state.mealCounts={carb:0,prot:0,fat:0,vit:0};
+  state.roundFoods=shuffle([...FOODS_R3]).slice(0,8);
+  state.foodIdx=0;state.answered=false;
+  startTimer(110);showR3Food(mult);
+}
+function showR3Food(mult){
+  if(state.foodIdx>=state.roundFoods.length){roundComplete();return;}
+  const groups=Object.values(state.mealCounts).filter(v=>v>0).length;
+  const r={...ROUNDS[2],desc:ROUNDS[2].desc+' ('+groups+'/4 nhóm đã có)'};
+  renderBasketUI(state.roundFoods[state.foodIdx],mult,r,()=>{state.foodIdx++;state.answered=false;showR3Food(mult);});
+}
+
+/* ═══════════════════ ROUND 4 – Master Test ═══════════════════ */
+function launchR4(mult){
+  state.roundFoods=shuffle([...FOODS_R4]).slice(0,9);
+  state.foodIdx=0;state.answered=false;
+  startTimer(120);showR4Q(mult);
+}
+function showR4Q(mult){
+  if(state.foodIdx>=state.roundFoods.length){roundComplete();return;}
+  const f=state.roundFoods[state.foodIdx];
+  const r=ROUNDS[3];
+  const opts=shuffle(Object.keys(G));
+  const pw=$('play-wrap');
+  pw.innerHTML=`
+    <div class="round-hdr">
+      <div class="round-hdr-title">${r.icon} ${r.name}</div>
+      <div class="round-hdr-sub">Điểm x2! · Câu ${state.foodIdx+1}/${state.roundFoods.length} · Đội: <strong style="color:${state.tBadge[state.curTeam]}">${state.teams[state.curTeam].name}</strong></div>
+    </div>
+    <div class="mom-row">
+      <div class="mom-char">👩</div>
+      <div class="mom-bubble">Vòng cuối! <strong>${f.name}</strong> thuộc nhóm nào? 🔥</div>
+    </div>
+    <div class="food-stage">
+      <div class="food-card" style="border-color:${G[f.group].color}">
+        <span class="food-emoji">${f.emoji}</span>
+        <div class="food-name">${f.name}</div>
+      </div>
+    </div>
+    <div class="quiz-opts" id="quiz-opts"></div>
+    ${progBarHTML()}`;
+  updateProgBar();
+  const oc=$('quiz-opts');
+  opts.forEach(gk=>{
+    const g=G[gk];
+    const btn=document.createElement('div');
+    btn.className='quiz-opt';btn.dataset.gk=gk;
+    btn.style.borderLeft=`5px solid ${g.color}`;
+    btn.innerHTML=`<span class="quiz-icon">${g.icon}</span>${g.name}`;
+    btn.onclick=()=>{
+      if(state.answered)return;state.answered=true;
+      const ok=gk===f.group;
+      btn.classList.add(ok?'correct':'wrong');
+      if(!ok)oc.querySelectorAll('.quiz-opt').forEach(b=>{if(b.dataset.gk===f.group)b.classList.add('correct');});
+      oc.querySelectorAll('.quiz-opt').forEach(b=>b.style.pointerEvents='none');
+      handleAnswer(ok,f,mult,()=>{state.foodIdx++;state.answered=false;showR4Q(mult);});
+    };
+    oc.appendChild(btn);
+  });
+}
+
+/* ═══════════════════ BASKET UI (R2 & R3) ═══════════════════ */
+function renderBasketUI(food,mult,r,onNext){
+  state.onNext=onNext;state.curFood=food;state.mult=mult;
+  const pw=$('play-wrap');
+  pw.innerHTML=`
+    <div class="round-hdr">
+      <div class="round-hdr-title">${r.icon} ${r.name}</div>
+      <div class="round-hdr-sub">${r.desc} · Đội: <strong style="color:${state.tBadge[state.curTeam]}">${state.teams[state.curTeam].name}</strong></div>
+    </div>
+    <div class="mom-row">
+      <div class="mom-char" id="mom-char">👩</div>
+      <div class="mom-bubble">Bỏ <strong>${food.name}</strong> vào giỏ đúng nhé!</div>
+    </div>
+    <div class="food-stage">
+      <div class="food-card" style="border-color:${G[food.group].color}">
+        <span class="food-emoji">${food.emoji}</span>
+        <div class="food-name">${food.name}</div>
+      </div>
+    </div>
+    <div class="baskets-grid">
+      ${Object.entries(G).map(([k,g])=>`
+        <div class="basket basket-${g.cls}" onclick="pickBasket('${k}')">
+          <div class="bask-icon">${g.icon}</div>
+          <div class="bask-label" style="color:${g.color}">${g.name}</div>
+          <div class="bask-count" style="color:${g.color}" id="bc-${k}">${state.mealCounts[k]>0?'✓ '+state.mealCounts[k]:'+'}</div>
+        </div>`).join('')}
+    </div>
+    ${progBarHTML()}`;
+  updateProgBar();
+}
+function pickBasket(gk){
+  if(state.answered)return;
+  state.answered=true;sndPop();
+  const ok=gk===state.curFood.group;
+  if(ok)state.mealCounts[gk]=(state.mealCounts[gk]||0)+1;
+  handleAnswer(ok,state.curFood,state.mult,state.onNext);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROUND 5 – NHÀ DINH DƯỠNG NHÍ – FIX: 3 TEAMS EACH PLAY
+   ═══════════════════════════════════════════════════════════ */
+const R5_FOODS=[
+  {id:'com',name:'Cơm trắng',emoji:'🍚',group:'carb'},
+  {id:'banh_mi',name:'Bánh mì',emoji:'🍞',group:'carb'},
+  {id:'khoai',name:'Khoai lang',emoji:'🍠',group:'carb'},
+  {id:'mi',name:'Mì sợi',emoji:'🍜',group:'carb'},
+  {id:'ngo',name:'Ngô nướng',emoji:'🌽',group:'carb'},
+  {id:'khoai_tay',name:'Khoai tây',emoji:'🥔',group:'carb'},
+  {id:'thit',name:'Thịt heo',emoji:'🥩',group:'prot'},
+  {id:'ca',name:'Cá biển',emoji:'🐟',group:'prot'},
+  {id:'trung',name:'Trứng gà',emoji:'🥚',group:'prot'},
+  {id:'tom',name:'Tôm tươi',emoji:'🦐',group:'prot'},
+  {id:'dau_hu',name:'Đậu hũ',emoji:'🫘',group:'prot'},
+  {id:'thit_ga',name:'Thịt gà',emoji:'🍗',group:'prot'},
+  {id:'ca_hoi',name:'Cá hồi',emoji:'🐠',group:'prot'},
+  {id:'rau',name:'Rau muống',emoji:'🥬',group:'vit'},
+  {id:'ca_rot',name:'Cà rốt',emoji:'🥕',group:'vit'},
+  {id:'trai',name:'Táo đỏ',emoji:'🍎',group:'vit'},
+  {id:'cam',name:'Cam tươi',emoji:'🍊',group:'vit'},
+  {id:'chuoi',name:'Chuối chín',emoji:'🍌',group:'vit'},
+  {id:'dua_leo',name:'Dưa leo',emoji:'🥒',group:'vit'},
+  {id:'xoai',name:'Xoài',emoji:'🥭',group:'vit'},
+  {id:'bo',name:'Bơ lạt',emoji:'🧈',group:'fat'},
+  {id:'pho_mai',name:'Phô mai',emoji:'🧀',group:'fat'},
+  {id:'dau_an',name:'Dầu ăn',emoji:'🫙',group:'fat'},
+  {id:'hat_dieu',name:'Hạt điều',emoji:'🥜',group:'fat'},
+  {id:'bo_qua',name:'Bơ quả',emoji:'🥑',group:'fat'}
+];
+const R5_COMMENTS={
+  ok:['Bữa ăn đủ chất rồi! 👏','Tuyệt vời! Con nấu giỏi quá! 🌟','Chuẩn luôn! Đủ 4 nhóm thật sự! 🎉'],
+  noCarb:['Thiếu bột đường! 🍚 Không có năng lượng đâu!','Quên cơm hay bánh mì rồi kìa! 😅'],
+  noProt:['Thiếu đạm rồi! 🥩 Cơ thể cần đạm để lớn!','Chưa có thịt, cá, hay trứng nhé!'],
+  noVit:['Thiếu rau rồi con ơi! 🥦 Rau giúp cơ thể khỏe!','Thêm ít rau hoặc trái cây vào nhé!'],
+  noFat:['Thiếu chất béo! 🧈 Cần một ít dầu ăn hay bơ nhé!'],
+  tooFat:['Nhiều dầu mỡ quá! 😅 Vừa thôi nhé!'],
+  perfect:['Hoàn hảo! Bữa ăn 5 sao! ⭐⭐⭐⭐⭐','Mẹ tự hào vì con biết ăn đủ chất! 🏆']
+};
+
+function launchR5(){
+  state.r5teamsDone=0;
+  state.r5sel=[];
+  // Start with team 0
+  state.curTeam=0;updateSB();
+  state.r5pool=shuffle([...R5_FOODS]);
+  stopTimer();startTimer(120);
+  renderR5();
+}
+
+function renderR5(){
+  const sel=state.r5sel;
+  const has={carb:sel.some(f=>f.group==='carb'),prot:sel.some(f=>f.group==='prot'),vit:sel.some(f=>f.group==='vit'),fat:sel.some(f=>f.group==='fat')};
+  const allMet=Object.values(has).every(Boolean);
+  const r=ROUNDS[4];
+  const turnNum=state.r5teamsDone+1;
+  const pw=$('play-wrap');
+  pw.innerHTML=`
+    <div class="round-hdr">
+      <div class="round-hdr-title">${r.icon} ${r.name}</div>
+      <div class="round-hdr-sub">Lượt ${turnNum}/3 · Đội: <strong style="color:${state.tBadge[state.curTeam]}">${state.teams[state.curTeam].name}</strong></div>
+    </div>
+    <div class="r5-team-banner" style="color:${state.tBadge[state.curTeam]}">
+      🍽️ Đến lượt <strong>${state.teams[state.curTeam].name}</strong> xây bữa ăn! (Lượt ${turnNum}/3)
+    </div>
+    <div class="mom-row">
+      <div class="mom-char" id="r5-mom">👩</div>
+      <div class="r5-mom-tip" id="r5-tip"></div>
+    </div>
+    <div class="r5-tray${allMet&&sel.length>=4?' ok':''}" id="r5-tray">
+      <div class="r5-tray-title">🍱 Khay bữa ăn của bạn (${sel.length}/6 món)</div>
+      <div class="r5-slots" id="r5-slots">
+        ${sel.map((f,i)=>`
+          <div class="r5-slot filled" style="border-color:${G[f.group].color}">
+            <span class="se">${f.emoji}</span>
+            <span class="sn">${f.name}</span>
+            <div class="sr" onclick="r5Remove(${i})">✕</div>
+          </div>`).join('')}
+        ${sel.length<6?`<div class="r5-slot">+ Thêm</div>`:''}
+      </div>
+      <div class="r5-badges">
+        ${[['carb','🌾','Bột đường'],['prot','🥩','Đạm'],['vit','🥦','Vitamin'],['fat','🧈','Béo']].map(([k,ic,lb])=>`
+          <div class="r5-badge ${has[k]?'met':'unmet'}">${ic} ${lb} ${has[k]?'✓':'?'}</div>`).join('')}
+      </div>
+    </div>
+    <div class="r5-pool" id="r5-pool">
+      ${state.r5pool.map((f,i)=>`
+        <div class="r5-food${sel.find(s=>s.id===f.id)?' used':''}" onclick="r5Pick(${i})" style="border-color:${G[f.group].color}">
+          <span class="fe">${f.emoji}</span>
+          <span class="fn">${f.name}</span>
+          <span class="fg" style="color:${G[f.group].color}">${G[f.group].icon}</span>
+        </div>`).join('')}
+    </div>
+    <button class="btn btn-pink" style="width:100%;max-width:340px" onclick="r5Check()">
+      🍱 Kiểm tra bữa ăn!
+    </button>`;
+}
+
+function r5Pick(i){
+  if(!state.r5sel)state.r5sel=[];
+  const f=state.r5pool[i];
+  if(state.r5sel.find(s=>s.id===f.id)||state.r5sel.length>=6)return;
+  state.r5sel.push(f);sndPop();renderR5();
+}
+function r5Remove(i){state.r5sel.splice(i,1);renderR5();}
+function r5ShowTip(txt){
+  const t=$('r5-tip');if(!t)return;
+  t.textContent=txt;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+function r5Check(){
+  const sel=state.r5sel||[];
+  if(sel.length<4){r5ShowTip('Chọn ít nhất 4 món nhé! 😊');return;}
+  const has={carb:sel.some(f=>f.group==='carb'),prot:sel.some(f=>f.group==='prot'),vit:sel.some(f=>f.group==='vit'),fat:sel.some(f=>f.group==='fat')};
+  const fatN=sel.filter(f=>f.group==='fat').length;
+  const allMet=Object.values(has).every(Boolean);
+  const team=state.teams[state.curTeam];
+
+  if(!has.carb){r5ShowTip(pick(R5_COMMENTS.noCarb));team.score=Math.max(0,team.score-10);floatScore('-10','#e8453c');sndBad();updateSB();return;}
+  if(!has.prot){r5ShowTip(pick(R5_COMMENTS.noProt));team.score=Math.max(0,team.score-10);floatScore('-10','#e8453c');sndBad();updateSB();return;}
+  if(!has.vit){r5ShowTip(pick(R5_COMMENTS.noVit));team.score=Math.max(0,team.score-10);floatScore('-10','#e8453c');sndBad();updateSB();return;}
+  if(!has.fat){r5ShowTip(pick(R5_COMMENTS.noFat));team.score=Math.max(0,team.score-5);floatScore('-5','#e8453c');sndBad();updateSB();return;}
+  if(fatN>2){r5ShowTip(pick(R5_COMMENTS.tooFat));team.score=Math.max(0,team.score-5);floatScore('-5','#f5a623');sndBad();updateSB();return;}
+
+  if(allMet){
+    stopTimer();
+    const perfect=sel.length>=4&&sel.length<=6;
+    const msg=perfect&&sel.length>=5?pick(R5_COMMENTS.perfect):pick(R5_COMMENTS.ok);
+    const pts=20+(perfect&&sel.length>=5?10:0)+(state.timerLeft>=90?5:0);
+    team.score+=pts;updateSB();
+    floatScore('+'+pts,'#27ae60');sndOk();confetti(28);
+    const tray=$('r5-tray');if(tray)tray.classList.add('ok');
+
+    // FIX: advance to next team, not roundComplete immediately
+    showFeedback(true,'🎉',msg,'Bữa ăn đủ 4 nhóm chất dinh dưỡng!',pts,()=>{
+      state.r5teamsDone++;
+      if(state.r5teamsDone<3){
+        // Move to next team, reset selection, keep timer
+        nextTeam();
+        state.r5sel=[];
+        state.r5pool=shuffle([...R5_FOODS]);
+        startTimer(120);
+        renderR5();
+      }else{
+        // All 3 teams played – round done
+        roundComplete();
+      }
+    });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ROUND 6 – SIÊU ĐẦU BẾP  FIX: 10s timer, 3 teams rotate
+   ═══════════════════════════════════════════════════════════ */
+const R6_SCENES=[
+  {char:'😵',name:'Bé An',prob:'Hay bị mệt, không có năng lượng!',correct:['carb','vit'],hint:'Cần bột đường và vitamin!',rescue:'Bé An có năng lượng rồi! 💪'},
+  {char:'😢',name:'Bé Bình',prob:'Không lớn, không cao lên được!',correct:['prot'],hint:'Cần đạm để xây dựng cơ thể!',rescue:'Bé Bình sẽ cao lớn! 🌱'},
+  {char:'😩',name:'Ông Nam',prob:'Thiếu năng lượng, uể oải cả ngày!',correct:['carb'],hint:'Bột đường cho nhiều năng lượng!',rescue:'Ông Nam khỏe lại rồi! ⚡'},
+  {char:'😰',name:'Bé Hoa',prob:'Da xanh xao, sức đề kháng yếu!',correct:['vit'],hint:'Rau và trái cây giàu vitamin!',rescue:'Bé Hoa đã khỏe mạnh! 🌈'},
+  {char:'🤒',name:'Chị Mai',prob:'Tóc rụng, móng giòn!',correct:['prot','fat'],hint:'Cần đạm và chất béo!',rescue:'Chị Mai sáng đẹp trở lại! ✨'},
+  {char:'😴',name:'Bé Tuấn',prob:'Hay buồn ngủ, không tập trung học!',correct:['carb','prot'],hint:'Não cần đường và đạm!',rescue:'Bé Tuấn tỉnh táo rồi! 🧠'},
+  {char:'🤧',name:'Bà Lan',prob:'Hay bị cảm cúm, ốm vặt!',correct:['vit'],hint:'Vitamin C giúp tăng đề kháng!',rescue:'Bà Lan khoẻ mạnh hơn rồi! 🛡️'},
+  {char:'🥱',name:'Anh Hùng',prob:'Cơ bắp yếu, không có sức mạnh!',correct:['prot'],hint:'Cần nhiều đạm để phát triển cơ!',rescue:'Anh Hùng mạnh mẽ trở lại! 💪'},
+  {char:'😟',name:'Cô Linh',prob:'Mắt mờ, nhìn kém khi tối!',correct:['vit','fat'],hint:'Vitamin A (cà rốt) và chất béo để hấp thụ!',rescue:'Cô Linh nhìn rõ rồi! 👁️'},
+  {char:'😣',name:'Bé Khôi',prob:'Răng yếu, xương dễ gãy!',correct:['prot','fat'],hint:'Cần đạm và chất béo (phô mai, sữa)!',rescue:'Bé Khôi xương chắc khoẻ! 🦷'}
+];
+const R6_OPTS=[
+  {id:'com',name:'Cơm trắng',emoji:'🍚',group:'carb'},
+  {id:'banh_mi',name:'Bánh mì',emoji:'🍞',group:'carb'},
+  {id:'khoai_lang',name:'Khoai lang',emoji:'🍠',group:'carb'},
+  {id:'ngo',name:'Ngô',emoji:'🌽',group:'carb'},
+  {id:'thit_heo',name:'Thịt heo',emoji:'🥩',group:'prot'},
+  {id:'trung',name:'Trứng gà',emoji:'🥚',group:'prot'},
+  {id:'ca_bien',name:'Cá biển',emoji:'🐟',group:'prot'},
+  {id:'tom',name:'Tôm tươi',emoji:'🦐',group:'prot'},
+  {id:'thit_ga',name:'Thịt gà',emoji:'🍗',group:'prot'},
+  {id:'dau_hu',name:'Đậu hũ',emoji:'🫘',group:'prot'},
+  {id:'rau_xanh',name:'Rau xanh',emoji:'🥬',group:'vit'},
+  {id:'cam',name:'Cam',emoji:'🍊',group:'vit'},
+  {id:'tao',name:'Táo',emoji:'🍎',group:'vit'},
+  {id:'ca_rot',name:'Cà rốt',emoji:'🥕',group:'vit'},
+  {id:'chuoi',name:'Chuối',emoji:'🍌',group:'vit'},
+  {id:'bo_lat',name:'Bơ lạt',emoji:'🧈',group:'fat'},
+  {id:'pho_mai',name:'Phô mai',emoji:'🧀',group:'fat'},
+  {id:'dau_an',name:'Dầu ăn',emoji:'🫙',group:'fat'},
+  {id:'hat_dieu',name:'Hạt điều',emoji:'🥜',group:'fat'}
+];
+
+function launchR6(){
+  state.r6scenes=shuffle([...R6_SCENES]);
+  state.r6idx=0;state.r6combo=0;state.r6teamsDone=0;
+  // Start with team 0
+  state.curTeam=0;updateSB();
+  stopTimer();renderR6();
+}
+
+function renderR6(){
+  // Each team gets 3 scenes then rotates (total 9 scenes, 3 per team)
+  // r6idx tracks global scene index, each team plays 3 scenes
+  const scenesPerTeam=3;
+  const totalScenes=scenesPerTeam*3; // 9
+  // Ensure we have enough scenes
+  while(state.r6scenes.length<totalScenes){
+    state.r6scenes=[...state.r6scenes,...shuffle([...R6_SCENES])];
+  }
+
+  if(state.r6idx>=totalScenes){roundComplete();return;}
+
+  const sc=state.r6scenes[state.r6idx];
+  const r=ROUNDS[5];
+  const teamSceneIdx=state.r6idx%scenesPerTeam; // 0,1,2 within each team's turn
+  const teamTurn=Math.floor(state.r6idx/scenesPerTeam)+1; // which team turn (1,2,3)
+
+  const correctItems=shuffle(R6_OPTS.filter(f=>sc.correct.includes(f.group))).slice(0,Math.min(2,sc.correct.length*2));
+  const wrongItems=shuffle(R6_OPTS.filter(f=>!sc.correct.includes(f.group))).slice(0,6-correctItems.length);
+  const opts=shuffle([...correctItems,...wrongItems]);
+  const pw=$('play-wrap');
+  pw.innerHTML=`
+    <div class="round-hdr">
+      <div class="round-hdr-title">${r.icon} ${r.name}</div>
+      <div class="round-hdr-sub">Đội ${teamTurn}/3 – Câu ${teamSceneIdx+1}/3 · Đội: <strong style="color:${state.tBadge[state.curTeam]}">${state.teams[state.curTeam].name}</strong></div>
+    </div>
+    <div class="r6-progress">
+      ${state.r6scenes.slice(0,totalScenes).map((_,i)=>`<div class="r6-dot ${i<state.r6idx?'done':i===state.r6idx?'curr':''}"></div>`).join('')}
+    </div>
+    <div class="r6-timer-row">
+      <div class="r6-ring" id="r6-ring">
+        <svg width="68" height="68" viewBox="0 0 68 68"><circle cx="34" cy="34" r="31"/><circle class="rp" id="r6-rp" cx="34" cy="34" r="31"/></svg>
+        <span id="r6-num">10</span>
+      </div>
+      <div class="r6-combo${state.r6combo>0?' fire':''}" id="r6-combo">
+        🔥 Combo: ${state.r6combo}${state.r6combo>=2?' x2!':''}
+      </div>
+    </div>
+    <div class="r6-scenario">
+      <div class="r6-chars">
+        <span class="r6-char" id="r6-char">${sc.char}</span>
+        <div>
+          <div class="r6-problem">${sc.name}: "${sc.prob}"</div>
+          <div class="r6-hint">👉 ${sc.hint}</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:var(--fh);font-size:.9rem;font-weight:900;color:#00838f;text-align:center">⚡ Chọn đúng thực phẩm để cứu ${sc.name}!</div>
+    <div class="r6-grid" id="r6-grid">
+      ${opts.map((f,i)=>`
+        <div class="r6-opt" id="r6opt${i}" onclick="r6Pick(${i},'${f.group}')">
+          <span class="oe">${f.emoji}</span>
+          <span class="on">${f.name}</span>
+        </div>`).join('')}
+    </div>`;
+  state.r6curOpts=opts;
+  state.r6answered=false;
+  r6StartCD();
+}
+
+function r6StartCD(){
+  if(state.r6cdTimer){clearInterval(state.r6cdTimer);state.r6cdTimer=null;}
+  // FIX: 10 seconds (was 5)
+  let t=10;
+  const circumference=196; // 2*pi*31
+  const update=()=>{
+    const n=$('r6-num'),rp=$('r6-rp'),ring=$('r6-ring');if(!n)return;
+    n.textContent=t;
+    if(rp)rp.style.strokeDashoffset=(circumference*(1-t/10))+'';
+    // visual urgency
+    if(ring){
+      ring.classList.toggle('urgent',t<=5&&t>3);
+      ring.classList.toggle('critical',t<=3);
+    }
+    if(t<=0){clearInterval(state.r6cdTimer);state.r6cdTimer=null;if(!state.r6answered)r6Answer(false,-1);}
+    t--;
+  };
+  update();
+  state.r6cdTimer=setInterval(update,1000);
+}
+
+function r6Pick(i,group){
+  if(state.r6answered)return;
+  state.r6answered=true;
+  if(state.r6cdTimer){clearInterval(state.r6cdTimer);state.r6cdTimer=null;}
+  const sc=state.r6scenes[state.r6idx];
+  const ok=sc.correct.includes(group);
+  const el=$('r6opt'+i);
+  if(el)el.classList.add(ok?'ok':'bad');
+  document.querySelectorAll('.r6-opt').forEach(b=>b.style.pointerEvents='none');
+  setTimeout(()=>r6Answer(ok,i),550);
+}
+
+function r6Answer(ok,optIdx){
+  const sc=state.r6scenes[state.r6idx];
+  const team=state.teams[state.curTeam];
+  const timeLeft=parseInt($('r6-num')?.textContent||0);
+  const scenesPerTeam=3;
+
+  if(ok){
+    state.r6combo=(state.r6combo||0)+1;
+    const cm=state.r6combo>=2?2:1;
+    // FIX: bonus based on 10s scale
+    const pts=(timeLeft>=8?15:timeLeft>=5?12:10)*cm;
+    team.score+=pts;updateSB();
+    floatScore('+'+pts+(cm>1?' 🔥x2':''),'#27ae60');sndOk();confetti(16);
+    const ch=$('r6-char');if(ch){ch.textContent='😄';ch.classList.add('rescued');}
+    const pu=document.createElement('div');pu.className='powerup';pu.textContent='⚡';
+    document.body.appendChild(pu);setTimeout(()=>pu.remove(),900);
+    showFeedback(true,'🎉',sc.rescue,'Bữa ăn đúng nhóm chất cần thiết!',pts,()=>{
+      state.r6idx++;
+      // Switch team every 3 scenes
+      if(state.r6idx%scenesPerTeam===0&&state.r6idx<scenesPerTeam*3){
+        nextTeam();
+        state.r6combo=0; // reset combo per team
+      }
+      renderR6();
+    });
+  }else{
+    state.r6combo=0;
+    team.score=Math.max(0,team.score-5);updateSB();
+    floatScore('-5','#e8453c');sndBad();
+    const needs=sc.correct.map(k=>G[k].name).join(' + ');
+    showFeedback(false,'😅','Chưa đúng!',sc.name+' cần: '+needs,0,()=>{
+      state.r6idx++;
+      if(state.r6idx%scenesPerTeam===0&&state.r6idx<scenesPerTeam*3){
+        nextTeam();
+        state.r6combo=0;
+      }
+      renderR6();
+    });
+  }
+}
+
+/* ═══════════════════ CONFETTI ═══════════════════ */
+function confetti(n=20){
+  const c=$('confetti-layer');
+  const colors=['#f5a623','#e8453c','#9b59b6','#27ae60','#4facfe','#ff8fab','#ffd32a'];
+  for(let i=0;i<n;i++){
+    const p=document.createElement('div');p.className='cf';
+    p.style.left=Math.random()*100+'vw';
+    p.style.width=(6+Math.random()*9)+'px';p.style.height=(6+Math.random()*9)+'px';
+    p.style.borderRadius=Math.random()>.5?'50%':'3px';
+    p.style.background=colors[Math.floor(Math.random()*colors.length)];
+    p.style.animationDuration=(1.4+Math.random()*2)+'s';
+    p.style.animationDelay=(Math.random()*.5)+'s';
+    c.appendChild(p);p.addEventListener('animationend',()=>p.remove());
+  }
+}
+
+/* ═══════════════════ FLOAT SCORE ═══════════════════ */
+function floatScore(txt,color){
+  const el=document.createElement('div');el.className='score-float';
+  el.textContent=txt;el.style.color=color;
+  el.style.left=(30+Math.random()*40)+'%';el.style.top='110px';
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1300);
+}
+
+/* ═══════════════════ AUDIO ═══════════════════ */
+let ac=null;
+function getAC(){if(!ac)ac=new(window.AudioContext||window.webkitAudioContext)();return ac;}
+function playTone(f,d,t='sine',v=.22){
+  if(state.muted)return;
+  try{const c=getAC(),o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);o.type=t;o.frequency.value=f;
+    g.gain.setValueAtTime(v,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);
+    o.start();o.stop(c.currentTime+d);}catch(e){}
+}
+function sndOk(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,.2,'triangle',.2),i*75));}
+function sndBad(){playTone(200,.35,'sawtooth',.18);}
+function sndPop(){playTone(440,.1,'sine',.14);}
+
+/* ═══════════════════ MUTE ═══════════════════ */
+$('btn-mute').onclick=function(){
+  state.muted=!state.muted;this.textContent=state.muted?'🔇':'🔊';
+};
+</script>
+</body>
+</html>
